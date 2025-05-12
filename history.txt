@@ -13,3 +13,4 @@ fix bug mcp server,  at 2025-05-24 16:12:33
 fix bug autocomplete at 2025-06-01 22:11:35
 Thêm tool search web at 2025-06-02 11:41:56
 update Prototype mcp server at 2025-06-13 20:33:06
+thêm tool tương tác MCP at 2025-05-12 16:12:33
