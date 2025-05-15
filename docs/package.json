@@ -1,4 +1,8 @@
 {
+  "name": "continue-docs",
+  "version": "0.0.0",
+  "author": "Continue Dev, Inc",
+  "private": true,
   "scripts": {
     "docusaurus": "docusaurus",
     "start": "nodemon --watch sidebars.js --watch docusaurus.config.js --exec \"docusaurus start\"",
