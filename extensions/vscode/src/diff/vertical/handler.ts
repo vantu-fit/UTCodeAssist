@@ -2,6 +2,8 @@ import { myersDiff } from "core/diff/myers";
 import * as URI from "uri-js";
 import * as vscode from "vscode";
 
+console.log("Loading VerticalDiffHandler...");
+
 import {
   DecorationTypeRangeManager,
   belowIndexDecorationType,
