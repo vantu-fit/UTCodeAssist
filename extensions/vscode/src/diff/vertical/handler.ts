@@ -13,6 +13,7 @@ import {
 import type { ApplyState, DiffLine } from "core";
 import type { VerticalDiffCodeLens } from "./manager";
 
+console.log("VerticalDiffHandler loaded");
 export interface VerticalDiffHandlerOptions {
   input?: string;
   instant?: boolean;
