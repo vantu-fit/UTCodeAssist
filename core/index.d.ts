@@ -34,6 +34,13 @@ export interface ChunkWithoutID {
   otherMetadata?: { [key: string]: any };
 }
 
+export interface MCPResourceTemplate {
+  uriTemplate: string;
+  name: string;
+  description?: string;
+  mimeType?: string;
+}
+
 export interface Chunk extends ChunkWithoutID {
   digest: string;
   filepath: string;
@@ -1127,7 +1134,6 @@ export interface MCPOptions {
   faviconUrl?: string;
   timeout?: number;
 }
-
 export type MCPConnectionStatus =
   | "connecting"
   | "connected"
@@ -1169,6 +1175,7 @@ export interface MCPServerStatus extends MCPOptions {
   prompts: MCPPrompt[];
   tools: MCPTool[];
   resources: MCPResource[];
+  resourceTemplates: MCPResourceTemplate[];
 }
 
 export interface ContinueUIConfig {

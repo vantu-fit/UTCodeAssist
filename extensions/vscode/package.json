@@ -77,7 +77,7 @@
       }
     ],
     "configuration": {
-      "title": "Continue",
+      "title": "UTCoAssist",
       "properties": {
         "continue.telemetryEnabled": {
           "type": "boolean",
@@ -534,6 +534,7 @@
       "activitybar": [
         {
           "id": "continue",
+          "title": "UTCoAssist",
           "title": "UTCoAssist",
           "icon": "media/sidebar-icon.png"
         }

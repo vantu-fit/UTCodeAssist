@@ -117,7 +117,23 @@ async function buildGui(isGhAction) {
   // fs.copyFileSync(indexHtmlPath, "tmp_index.html");
   // rimrafSync(intellijExtensionWebviewPath);
   // fs.mkdirSync(intellijExtensionWebviewPath, { recursive: true });
+  // const indexHtmlPath = path.join(intellijExtensionWebviewPath, "index.html");
+  // fs.copyFileSync(indexHtmlPath, "tmp_index.html");
+  // rimrafSync(intellijExtensionWebviewPath);
+  // fs.mkdirSync(intellijExtensionWebviewPath, { recursive: true });
 
+  // await new Promise((resolve, reject) => {
+  //   ncp("dist", intellijExtensionWebviewPath, (error) => {
+  //     if (error) {
+  //       console.warn(
+  //         "[error] Error copying React app build to JetBrains extension: ",
+  //         error,
+  //       );
+  //       reject(error);
+  //     }
+  //     resolve();
+  //   });
+  // });
   // await new Promise((resolve, reject) => {
   //   ncp("dist", intellijExtensionWebviewPath, (error) => {
   //     if (error) {
