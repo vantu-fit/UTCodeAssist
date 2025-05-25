@@ -41,15 +41,7 @@
   ],
   "keywords": [
     "chatgpt",
-    "github",
-    "copilot",
-    "claude",
-    "sonnet",
-    "mistral",
-    "codestral",
-    "codegpt",
-    "ai",
-    "llama"
+    "github"
   ],
   "activationEvents": [
     "onUri",
