@@ -2,6 +2,7 @@ const fs = require("fs");
 
 const directories = [
   // gui
+  "./gui/package",
   "./gui/node_modules",
   "./gui/out",
   "./gui/dist",
