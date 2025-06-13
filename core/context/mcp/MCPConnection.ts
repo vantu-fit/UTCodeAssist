@@ -1,143 +1,52 @@
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
+import { Transport } from "@modelcontextprotocol/sdk/shared/transport.js";
+
 import { SSEClientTransport } from "@modelcontextprotocol/sdk/client/sse.js";
 import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js";
+// import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/streamableHttp.js";
 import { WebSocketClientTransport } from "@modelcontextprotocol/sdk/client/websocket.js";
-import { Transport } from "@modelcontextprotocol/sdk/shared/transport.js";
 
 import {
   MCPConnectionStatus,
   MCPOptions,
   MCPPrompt,
   MCPResource,
+  MCPResourceTemplate,
   MCPServerStatus,
   MCPTool,
 } from "../..";
+import { getEnvPathFromUserShell } from "../../util/shellPath";
 
-export class MCPManagerSingleton {
-  private static instance: MCPManagerSingleton;
+const DEFAULT_MCP_TIMEOUT = 20_000; // 20 seconds
 
-  public onConnectionsRefreshed?: () => void;
-  private connections: Map<string, MCPConnection> = new Map();
-
-  private abortController: AbortController = new AbortController();
-
-  private constructor() {}
-
-  public static getInstance(): MCPManagerSingleton {
-    if (!MCPManagerSingleton.instance) {
-      MCPManagerSingleton.instance = new MCPManagerSingleton();
-    }
-    return MCPManagerSingleton.instance;
-  }
-
-  createConnection(id: string, options: MCPOptions): MCPConnection {
-    if (!this.connections.has(id)) {
-      const connection = new MCPConnection(options);
-      this.connections.set(id, connection);
-      return connection;
-    } else {
-      return this.connections.get(id)!;
-    }
-  }
-
-  getConnection(id: string) {
-    return this.connections.get(id);
-  }
-
-  async removeConnection(id: string) {
-    const connection = this.connections.get(id);
-    if (connection) {
-      await connection.client.close();
-    }
-
-    this.connections.delete(id);
-  }
-
-  setConnections(servers: MCPOptions[], forceRefresh: boolean) {
-    let refresh = false;
-
-    // Remove any connections that are no longer in config
-    Array.from(this.connections.entries()).forEach(([id, connection]) => {
-      if (!servers.find((s) => s.id === id)) {
-        refresh = true;
-        connection.abortController.abort();
-        void connection.client.close();
-        this.connections.delete(id);
-      }
-    });
-
-    // Add any connections that are not yet in manager
-    servers.forEach((server) => {
-      if (!this.connections.has(server.id)) {
-        refresh = true;
-        this.connections.set(server.id, new MCPConnection(server));
-      }
-    });
-
-    // NOTE the id is made by stringifying the options
-    if (refresh) {
-      void this.refreshConnections(forceRefresh);
-    }
-  }
-
-  async refreshConnection(serverId: string) {
-    const connection = this.connections.get(serverId);
-    if (!connection) {
-      throw new Error(`MCP Connection ${serverId} not found`);
-    }
-    await connection.connectClient(true, this.abortController.signal);
-    if (this.onConnectionsRefreshed) {
-      this.onConnectionsRefreshed();
-    }
-  }
-
-  async refreshConnections(force: boolean) {
-    this.abortController.abort();
-    this.abortController = new AbortController();
-    await Promise.race([
-      new Promise((resolve) => {
-        this.abortController.signal.addEventListener("abort", () => {
-          resolve(undefined);
-        });
-      }),
-      (async () => {
-        await Promise.all(
-          Array.from(this.connections.values()).map(async (connection) => {
-            await connection.connectClient(force, this.abortController.signal);
-          }),
-        );
-        if (this.onConnectionsRefreshed) {
-          this.onConnectionsRefreshed();
-        }
-      })(),
-    ]);
-  }
-
-  getStatuses(): (MCPServerStatus & { client: Client })[] {
-    return Array.from(this.connections.values()).map((connection) => ({
-      ...connection.getStatus(),
-      client: connection.client,
-    }));
-  }
-}
-
-const DEFAULT_MCP_TIMEOUT = 20_000; // 10 seconds
+// Commands that are batch scripts on Windows and need cmd.exe to execute
+const WINDOWS_BATCH_COMMANDS = [
+  "npx",
+  "uv",
+  "uvx",
+  "pnpx",
+  "dlx",
+  "nx",
+  "bunx",
+];
 
 class MCPConnection {
   public client: Client;
-  private transport: Transport;
-
-  private connectionPromise: Promise<unknown> | null = null;
   public abortController: AbortController;
-
   public status: MCPConnectionStatus = "not-connected";
   public errors: string[] = [];
-
   public prompts: MCPPrompt[] = [];
   public tools: MCPTool[] = [];
   public resources: MCPResource[] = [];
+  public resourceTemplates: MCPResourceTemplate[] = [];
+  private transport: Transport;
+  private connectionPromise: Promise<unknown> | null = null;
+  private stdioOutput: { stdout: string; stderr: string } = {
+    stdout: "",
+    stderr: "",
+  };
 
-  constructor(private readonly options: MCPOptions) {
+  constructor(public options: MCPOptions) {
     this.transport = this.constructTransport(options);
 
     this.client = new Client(
@@ -153,27 +62,10 @@ class MCPConnection {
     this.abortController = new AbortController();
   }
 
-  private constructTransport(options: MCPOptions): Transport {
-    switch (options.transport.type) {
-      case "stdio":
-        const env: Record<string, string> = options.transport.env || {};
-        if (process.env.PATH !== undefined) {
-          env.PATH = process.env.PATH;
-        }
-        return new StdioClientTransport({
-          command: options.transport.command,
-          args: options.transport.args,
-          env,
-        });
-      case "websocket":
-        return new WebSocketClientTransport(new URL(options.transport.url));
-      case "sse":
-        return new SSEClientTransport(new URL(options.transport.url));
-      default:
-        throw new Error(
-          `Unsupported transport type: ${(options.transport as any).type}`,
-        );
-    }
+  async disconnect() {
+    this.abortController.abort();
+    await this.client.close();
+    await this.transport.close();
   }
 
   getStatus(): MCPServerStatus {
@@ -182,6 +74,7 @@ class MCPConnection {
       errors: this.errors,
       prompts: this.prompts,
       resources: this.resources,
+      resourceTemplates: this.resourceTemplates,
       tools: this.tools,
       status: this.status,
     };
@@ -205,7 +98,9 @@ class MCPConnection {
     this.tools = [];
     this.prompts = [];
     this.resources = [];
+    this.resourceTemplates = [];
     this.errors = [];
+    this.stdioOutput = { stdout: "", stderr: "" };
 
     this.abortController.abort();
     this.abortController = new AbortController();
@@ -278,6 +173,23 @@ class MCPConnection {
                   }
                   this.errors.push(errorMessage);
                 }
+
+                // Resource templates
+                try {
+                  const { resourceTemplates } =
+                    await this.client.listResourceTemplates(
+                      {},
+                      { signal: timeoutController.signal },
+                    );
+
+                  this.resourceTemplates = resourceTemplates;
+                } catch (e) {
+                  let errorMessage = `Error loading resource templates for MCP Server ${this.options.name}`;
+                  if (e instanceof Error) {
+                    errorMessage += `: ${e.message}`;
+                  }
+                  this.errors.push(errorMessage);
+                }
               }
 
               // Tools <—> Tools
@@ -319,14 +231,28 @@ class MCPConnection {
           ]);
         } catch (error) {
           // Otherwise it's a connection error
-          let errorMessage = `Failed to connect to MCP server ${this.options.name}`;
+          let errorMessage = `Failed to connect to "${this.options.name}"\n`;
           if (error instanceof Error) {
             const msg = error.message.toLowerCase();
             if (msg.includes("spawn") && msg.includes("enoent")) {
               const command = msg.split(" ")[1];
-              errorMessage += `command "${command}" not found. To use this MCP server, install the ${command} CLI.`;
+              errorMessage += `Error: command "${command}" not found. To use this MCP server, install the ${command} CLI.`;
             } else {
-              errorMessage += ": " + error.message;
+              errorMessage += "Error: " + error.message;
+            }
+          }
+
+          // Include stdio output if available for stdio transport
+          if (
+            this.options.transport.type === "stdio" &&
+            (this.stdioOutput.stdout || this.stdioOutput.stderr)
+          ) {
+            errorMessage += "\n\nProcess output:";
+            if (this.stdioOutput.stdout) {
+              errorMessage += `\nSTDOUT:\n${this.stdioOutput.stdout}`;
+            }
+            if (this.stdioOutput.stderr) {
+              errorMessage += `\nSTDERR:\n${this.stdioOutput.stderr}`;
             }
           }
 
@@ -340,6 +266,109 @@ class MCPConnection {
     ]);
 
     await this.connectionPromise;
+  }
+
+  /**
+   * Resolves the command and arguments for the current platform
+   * On Windows, batch script commands need to be executed via cmd.exe
+   * @param originalCommand The original command
+   * @param originalArgs The original command arguments
+   * @returns An object with the resolved command and arguments
+   */
+  private resolveCommandForPlatform(
+    originalCommand: string,
+    originalArgs: string[],
+  ): { command: string; args: string[] } {
+    // If not on Windows or not a batch command, return as-is
+    if (
+      process.platform !== "win32" ||
+      !WINDOWS_BATCH_COMMANDS.includes(originalCommand)
+    ) {
+      return { command: originalCommand, args: originalArgs };
+    }
+
+    // On Windows, we need to execute batch commands via cmd.exe
+    // Format: cmd.exe /c command [args]
+    return {
+      command: "cmd.exe",
+      args: ["/c", originalCommand, ...originalArgs],
+    };
+  }
+
+  private constructTransport(options: MCPOptions): Transport {
+    switch (options.transport.type) {
+      case "stdio":
+        const env: Record<string, string> = options.transport.env
+          ? { ...options.transport.env }
+          : {};
+
+        if (process.env.PATH !== undefined) {
+          // Set the initial PATH from process.env
+          env.PATH = process.env.PATH;
+
+          // For non-Windows platforms, try to get the PATH from user shell
+          if (process.platform !== "win32") {
+            try {
+              const shellEnvPath = getEnvPathFromUserShell();
+              if (shellEnvPath && shellEnvPath !== process.env.PATH) {
+                env.PATH = shellEnvPath;
+              }
+            } catch (err) {
+              console.error("Error getting PATH:", err);
+            }
+          }
+        }
+
+        // Resolve the command and args for the current platform
+        const { command, args } = this.resolveCommandForPlatform(
+          options.transport.command,
+          options.transport.args || [],
+        );
+
+        const transport = new StdioClientTransport({
+          command,
+          args,
+          env,
+          stderr: "pipe",
+        });
+
+        // Capture stdio output for better error reporting
+
+        transport.stderr?.on("data", (data: Buffer) => {
+          this.stdioOutput.stderr += data.toString();
+        });
+
+        return transport;
+      case "websocket":
+        return new WebSocketClientTransport(new URL(options.transport.url));
+      case "sse":
+        return new SSEClientTransport(new URL(options.transport.url), {
+          eventSourceInit: {
+            fetch: (input, init) =>
+              fetch(input, {
+                ...init,
+                headers: {
+                  ...init?.headers,
+                  ...(options.transport.requestOptions?.headers as
+                    | Record<string, string>
+                    | undefined),
+                },
+              }),
+          },
+          requestInit: { headers: options.transport.requestOptions?.headers },
+        });
+      // case "streamable-http":
+      //   return new StreamableHTTPClientTransport(
+      //     new URL(options.transport.url),
+      //     {
+      //       requestInit: { headers: options.transport.requestOptions?.headers },
+      //     },
+      //   );
+      default:
+        throw new Error(
+          `Unsupported transport type: ${(options.transport as any).type}`,
+        );
+    }
   }
 }
 

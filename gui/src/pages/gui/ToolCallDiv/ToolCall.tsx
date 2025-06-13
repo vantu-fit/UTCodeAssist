@@ -72,7 +72,7 @@ export function ToolCallDisplay(props: ToolCallDisplayProps) {
     }
     return (
       <div className="block">
-        <span>Continue</span> {intro} {message}
+        <span>UTCoAssist</span> {intro} {message}
       </div>
     );
   }, [props.toolCallState, tool]);
