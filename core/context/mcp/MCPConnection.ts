@@ -1,7 +1,6 @@
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { Transport } from "@modelcontextprotocol/sdk/shared/transport.js";
 
-import { SSEClientTransport } from "@modelcontextprotocol/sdk/client/sse.js";
 import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js";
 // import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/streamableHttp.js";
 import { WebSocketClientTransport } from "@modelcontextprotocol/sdk/client/websocket.js";
@@ -341,22 +340,22 @@ class MCPConnection {
         return transport;
       case "websocket":
         return new WebSocketClientTransport(new URL(options.transport.url));
-      case "sse":
-        return new SSEClientTransport(new URL(options.transport.url), {
-          eventSourceInit: {
-            fetch: (input, init) =>
-              fetch(input, {
-                ...init,
-                headers: {
-                  ...init?.headers,
-                  ...(options.transport.requestOptions?.headers as
-                    | Record<string, string>
-                    | undefined),
-                },
-              }),
-          },
-          requestInit: { headers: options.transport.requestOptions?.headers },
-        });
+      // case "sse":
+      //   return new SSEClientTransport(new URL(options.transport.url), {
+      //     eventSourceInit: {
+      //       fetch: (input, init) =>
+      //         fetch(input, {
+      //           ...init,
+      //           headers: {
+      //             ...init?.headers,
+      //             ...(options.transport.requestOptions?.headers as
+      //               | Record<string, string>
+      //               | undefined),
+      //           },
+      //         }),
+      //     },
+      //     requestInit: { headers: options.transport.requestOptions?.headers },
+      //   });
       // case "streamable-http":
       //   return new StreamableHTTPClientTransport(
       //     new URL(options.transport.url),
