@@ -1,0 +1,33 @@
+lockfileVersion: '9.0'
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
+importers:
+
+  .:
+    dependencies:
+      '@continuedev/llm-info':
+        specifier: 'file:'
+        version: 'file:'
+    devDependencies:
+      typescript:
+        specifier: ^5.5.2
+        version: 5.8.3
+
+packages:
+
+  '@continuedev/llm-info@file:':
+    resolution: {directory: '', type: directory}
+
+  typescript@5.8.3:
+    resolution: {integrity: sha512-p1diW6TqL9L07nNxvRMM7hMMw4c5XOo/1ibL4aAIGmSAt9slTE1Xgw5KWuof2uTOvCg9BY7ZRi+GaF+7sfgPeQ==}
+    engines: {node: '>=14.17'}
+    hasBin: true
+
+snapshots:
+
+  '@continuedev/llm-info@file:': {}
+
+  typescript@5.8.3: {}

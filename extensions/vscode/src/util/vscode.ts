@@ -21,8 +21,22 @@ export function getNonce() {
   return text;
 }
 
-export function getExtensionUri(): vscode.Uri {
-  return vscode.extensions.getExtension("Continue.continue")!.extensionUri;
+export function getExtensionUri(context?: vscode.ExtensionContext): vscode.Uri {
+  if (context) {
+    return context.extensionUri;
+  }
+  // Try to find the extension by id (fallback)
+  const ext = vscode.extensions.getExtension("utcodeassist.continue");
+  if (ext) {
+    return ext.extensionUri;
+  }
+  // Fallback to previous id for compatibility
+  const oldExt = vscode.extensions.getExtension("Continue.continue");
+  if (oldExt) {
+    return oldExt.extensionUri;
+  }
+  console.warn("Could not find extensionUri. Please provide context to getExtensionUri.");
+  throw new Error("Extension URI not found");
 }
 
 export function getViewColumnOfFile(

@@ -64,7 +64,7 @@ async function modelConfigToBaseLLM({
     uniqueId,
     title: model.name,
     promptTemplates: model.promptTemplates,
-    baseChatSystemMessage: model.chatOptions?.baseSystemMessage,
+    baseChatSystemMessage: (model as any).chatOptions?.baseSystemMessage,
     capabilities: {
       tools: model.capabilities?.includes("tool_use"),
       uploadImage: model.capabilities?.includes("image_input"),

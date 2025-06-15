@@ -14,5 +14,7 @@
   "devDependencies": {
     "typescript": "^5.5.2"
   },
-  "dependencies": {}
+  "dependencies": {
+    "@continuedev/llm-info": "file:"
+  }
 }

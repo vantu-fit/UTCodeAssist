@@ -22,5 +22,8 @@
     "outputPath": "bin"
   },
   "author": "",
-  "license": "Apache-2.0"
+  "license": "Apache-2.0",
+  "dependencies": {
+    "continue-binary": "file:"
+  }
 }

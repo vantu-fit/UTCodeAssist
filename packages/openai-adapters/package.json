@@ -16,6 +16,7 @@
     "@continuedev/config-types": "^1.0.5",
     "@continuedev/config-yaml": "^1.0.51",
     "@continuedev/fetch": "^1.0.3",
+    "@continuedev/openai-adapters": "file:",
     "json-schema": "^0.4.0",
     "node-fetch": "^3.3.2",
     "openai": "^4.76.0",

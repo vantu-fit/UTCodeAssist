@@ -80,7 +80,7 @@ export function addModel(
         defaultCompletionOptions: model.completionOptions,
       };
       if (model.systemMessage) {
-        desc.chatOptions = {
+        (desc as any).chatOptions = {
           baseSystemMessage:
             DEFAULT_CHAT_SYSTEM_MESSAGE + "\n\n" + model.systemMessage,
         };

@@ -9,8 +9,7 @@ import { VsCodeWebviewProtocol } from "./webviewProtocol";
 import type { FileEdit } from "core";
 
 export class ContinueGUIWebviewViewProvider
-  implements vscode.WebviewViewProvider
-{
+  implements vscode.WebviewViewProvider {
   public static readonly viewType = "continue.continueGUIView";
   public webviewProtocol: VsCodeWebviewProtocol;
 
@@ -77,7 +76,7 @@ export class ContinueGUIWebviewViewProvider
     edits: FileEdit[] | undefined = undefined,
     isFullScreen = false,
   ): string {
-    const extensionUri = getExtensionUri();
+    const extensionUri = getExtensionUri(context);
     let scriptUri: string;
     let styleMainUri: string;
     const vscMediaUrl: string = panel.webview
@@ -146,17 +145,16 @@ export class ContinueGUIWebviewViewProvider
       <body>
         <div id="root"></div>
 
-        ${
-          inDevelopmentMode
-            ? `<script type="module">
+        ${inDevelopmentMode
+        ? `<script type="module">
           import RefreshRuntime from "http://localhost:5173/@react-refresh"
           RefreshRuntime.injectIntoGlobalHook(window)
           window.$RefreshReg$ = () => {}
           window.$RefreshSig$ = () => (type) => type
           window.__vite_plugin_react_preamble_installed__ = true
           </script>`
-            : ""
-        }
+        : ""
+      }
 
         <script type="module" nonce="${nonce}" src="${scriptUri}"></script>
 
@@ -169,17 +167,16 @@ export class ContinueGUIWebviewViewProvider
         <script>window.fullColorTheme = ${JSON.stringify(currentTheme)}</script>
         <script>window.colorThemeName = "dark-plus"</script>
         <script>window.workspacePaths = ${JSON.stringify(
-          vscode.workspace.workspaceFolders?.map((folder) =>
-            folder.uri.toString(),
-          ) || [],
-        )}</script>
+        vscode.workspace.workspaceFolders?.map((folder) =>
+          folder.uri.toString(),
+        ) || [],
+      )}</script>
         <script>window.isFullScreen = ${isFullScreen}</script>
 
-        ${
-          edits
-            ? `<script>window.edits = ${JSON.stringify(edits)}</script>`
-            : ""
-        }
+        ${edits
+        ? `<script>window.edits = ${JSON.stringify(edits)}</script>`
+        : ""
+      }
         ${page ? `<script>window.location.pathname = "${page}"</script>` : ""}
       </body>
     </html>`;

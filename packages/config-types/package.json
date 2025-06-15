@@ -16,6 +16,7 @@
     "typescript": "^5.5.2"
   },
   "dependencies": {
+    "@continuedev/config-types": "file:",
     "zod": "^3.24.2"
   }
 }

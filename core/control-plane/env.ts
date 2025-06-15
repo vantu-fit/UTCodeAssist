@@ -61,11 +61,11 @@ export async function getControlPlaneEnv(
   ideSettingsPromise: Promise<IdeSettings>,
 ): Promise<ControlPlaneEnv> {
   const ideSettings = await ideSettingsPromise;
-  return getControlPlaneEnvSync(ideSettings.continueTestEnvironment);
+  return getControlPlaneEnvSync(ideSettings.continueTestEnvironment, ideSettings.continueTestEnvironment);
 }
 
 export function getControlPlaneEnvSync(
-  ideTestEnvironment: IdeSettings["continueTestEnvironment"],
+continueTestEnvironment: string, ideTestEnvironment: IdeSettings["continueTestEnvironment"],
 ): ControlPlaneEnv {
   // Note .local overrides .staging
   if (fs.existsSync(getLocalEnvironmentDotFilePath())) {

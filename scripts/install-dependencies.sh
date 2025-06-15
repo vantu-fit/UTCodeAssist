@@ -5,8 +5,17 @@
 # - Debug -> Extension
 set -e
 
+# Add explicit path to Node.js (remove the escaped space)
+export PATH="/c/Program Files/nodejs:$PATH"
+
+echo "📦 Using Node.js from: $(which node)"
+echo "📦 Node.js version: $(node --version)"
+
 # Set the correct Node version at the start of the script
 setup_node_version() {
+  # Store original Node.js location
+  original_node_path=$(which node)
+  
   # Get required node version from .node-version or .nvmrc
   if [ -f .node-version ]; then
     required_node_version=$(cat .node-version)
@@ -16,10 +25,10 @@ setup_node_version() {
     echo "No .node-version or .nvmrc file found. Skipping Node.js version check."
     return
   fi
-
+  
   # Remove 'v' prefix if present
   required_version=${required_node_version#v}
-
+  
   # Try fnm first
   if command -v fnm &> /dev/null; then
     echo "📦 Using fnm to set Node.js version to $required_version..."
@@ -36,11 +45,16 @@ setup_node_version() {
   else
     echo "Neither fnm nor nvm found. Proceeding with current Node.js version."
   fi
-
+  
+  # If node command doesn't work after version managers, restore original path
+  if ! command -v node &> /dev/null; then
+    export PATH="$(dirname $original_node_path):$PATH"
+  fi
+  
   # Verify the current Node.js version after our attempt to set it
   current_node_version=$(node -v)
   current_version=${current_node_version#v}
-
+  
   if [ "$required_version" != "$current_version" ]; then
     echo "⚠️  Warning: Your Node.js version ($current_node_version) does not match the required version (v$required_version)"
     echo "Even after attempting to use version managers, the correct version couldn't be activated."

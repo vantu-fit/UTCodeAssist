@@ -17,5 +17,8 @@
   },
   "devDependencies": {
     "typescript": "^4.0 || ^5.0"
+  },
+  "dependencies": {
+    "@continuedev/sdk": "file:"
   }
 }

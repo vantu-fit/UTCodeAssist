@@ -6,7 +6,6 @@ import {
   ConfigValidationError,
   FQSN,
   isAssistantUnrolledNonNullable,
-  MCPServer,
   ModelRole,
   PlatformClient,
   RegistryClient,
@@ -79,7 +78,7 @@ function convertYamlRuleToContinueRule(rule: Rule): RuleWithSource {
 }
 
 function convertYamlMcpToContinueMcp(
-  server: MCPServer,
+  server: any ,
 ): ExperimentalMCPOptions {
   return {
     transport: {
@@ -111,6 +110,7 @@ async function loadConfigYaml(
       new RegistryClient(
         await controlPlaneClient.getAccessToken(),
         getControlPlaneEnvSync(
+          ideSettings.continueTestEnvironment,
           ideSettings.continueTestEnvironment,
         ).CONTROL_PLANE_URL,
       ),

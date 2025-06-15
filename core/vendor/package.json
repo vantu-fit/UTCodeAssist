@@ -9,7 +9,8 @@
   "author": "",
   "license": "Apache-2.0",
   "dependencies": {
-    "@xenova/transformers": "^2.14.0"
+    "@xenova/transformers": "^2.14.0",
+    "vendor": "file:"
   },
   "engine-strict": true,
   "engines": {
