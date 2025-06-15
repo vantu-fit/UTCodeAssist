@@ -1,7 +1,7 @@
 {
   "name": "continue",
   "icon": "media/icon.png",
-  "author": "Continue Dev, Inc",
+  "author": "HCMUS-Group5",
   "version": "1.1.24",
   "repository": {
     "type": "git",
@@ -542,14 +542,14 @@
       "activitybar": [
         {
           "id": "continue",
-          "title": "Continue",
+          "title": "UTCoAssist",
           "icon": "media/sidebar-icon.png"
         }
       ],
       "panel": [
         {
           "id": "continueConsole",
-          "title": "Continue Console",
+          "title": "UTCoAssist Console",
           "icon": "$(window)"
         }
       ]
@@ -559,7 +559,7 @@
         {
           "type": "webview",
           "id": "continue.continueGUIView",
-          "name": "Continue",
+          "name": "UTCoAssist",
           "icon": "media/sidebar-icon.png",
           "visibility": "visible"
         }
@@ -568,7 +568,7 @@
         {
           "type": "webview",
           "id": "continue.continueConsoleView",
-          "name": "Continue Console",
+          "name": "UTCoAssist Console",
           "icon": "$(window)",
           "visibility": "visible",
           "when": "config.continue.enableConsole"
