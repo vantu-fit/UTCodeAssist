@@ -18,11 +18,11 @@ export const quickPickStatusText = (status: StatusBarStatus | undefined) => {
   switch (status) {
     case undefined:
     case StatusBarStatus.Disabled:
-      return "$(circle-slash) Disable autocomplete";
+      return "$(circle-slash) Disable UTCoAssist autocomplete";
     case StatusBarStatus.Enabled:
-      return "$(check) Enable autocomplete";
+      return "$(check) Enable UTCoAssist autocomplete";
     case StatusBarStatus.Paused:
-      return "$(debug-pause) Pause autocomplete";
+      return "$(debug-pause) Pause UTCoAssist autocomplete";
   }
 };
 
@@ -30,11 +30,11 @@ export const getStatusBarStatusFromQuickPickItemLabel = (
   label: string,
 ): StatusBarStatus | undefined => {
   switch (label) {
-    case "$(circle-slash) Disable autocomplete":
+    case "$(circle-slash) Disable UTCoAssist autocomplete":
       return StatusBarStatus.Disabled;
-    case "$(check) Enable autocomplete":
+    case "$(check) Enable UTCoAssist autocomplete":
       return StatusBarStatus.Enabled;
-    case "$(debug-pause) Pause autocomplete":
+    case "$(debug-pause) Pause UTCoAssist autocomplete":
       return StatusBarStatus.Paused;
     default:
       return undefined;
@@ -53,14 +53,14 @@ const statusBarItemText = (
   switch (status) {
     case undefined:
       if (loading) {
-        return "$(loading~spin) Continue";
+        return "$(loading~spin) UTCoAssist";
       }
     case StatusBarStatus.Disabled:
-      return "$(circle-slash) Continue";
+      return "$(circle-slash) UTCoAssist";
     case StatusBarStatus.Enabled:
-      return "$(check) Continue";
+      return "$(check) UTCoAssist";
     case StatusBarStatus.Paused:
-      return "$(debug-pause) Continue";
+      return "$(debug-pause) UTCoAssist";
   }
 };
 
@@ -68,11 +68,11 @@ const statusBarItemTooltip = (status: StatusBarStatus | undefined) => {
   switch (status) {
     case undefined:
     case StatusBarStatus.Disabled:
-      return "Click to enable tab autocomplete";
+      return "Click to enable UTCoAssist tab autocomplete";
     case StatusBarStatus.Enabled:
-      return "Tab autocomplete is enabled";
+      return "UTCoAssist tab autocomplete is enabled";
     case StatusBarStatus.Paused:
-      return "Tab autocomplete is paused";
+      return "UTCoAssist tab autocomplete is paused";
   }
 };
 

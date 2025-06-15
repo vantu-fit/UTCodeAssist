@@ -8,7 +8,7 @@
 
 <div align="center">
 
-**UTCoAssist is a powerful open-source AI code assistant designed to enhance your coding experience in VS Code, featuring advanced automation and integration capabilities.**
+**UTCoAssist is a powerful AI code assistant designed to enhance your coding experience in VS Code, featuring advanced automation and integration capabilities.**
 
 </div>
 
