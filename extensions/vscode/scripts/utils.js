@@ -38,29 +38,29 @@ function copyConfigSchema() {
   };
   fs.writeFileSync("continue_rc_schema.json", JSON.stringify(schema, null, 2));
 
-  // Copy config schemas to intellij
-  fs.copyFileSync(
-    "config_schema.json",
-    path.join(
-      "..",
-      "intellij",
-      "src",
-      "main",
-      "resources",
-      "config_schema.json",
-    ),
-  );
-  fs.copyFileSync(
-    "continue_rc_schema.json",
-    path.join(
-      "..",
-      "intellij",
-      "src",
-      "main",
-      "resources",
-      "continue_rc_schema.json",
-    ),
-  );
+  // // Copy config schemas to intellij
+  // fs.copyFileSync(
+  //   "config_schema.json",
+  //   path.join(
+  //     "..",
+  //     "intellij",
+  //     "src",
+  //     "main",
+  //     "resources",
+  //     "config_schema.json",
+  //   ),
+  // );
+  // fs.copyFileSync(
+  //   "continue_rc_schema.json",
+  //   path.join(
+  //     "..",
+  //     "intellij",
+  //     "src",
+  //     "main",
+  //     "resources",
+  //     "continue_rc_schema.json",
+  //   ),
+  // );
 }
 
 function copyTokenizers() {
@@ -102,34 +102,34 @@ async function buildGui(isGhAction) {
     execCmdSync("npm run build");
   }
 
-  // Copy over the dist folder to the JetBrains extension //
-  const intellijExtensionWebviewPath = path.join(
-    "..",
-    "extensions",
-    "intellij",
-    "src",
-    "main",
-    "resources",
-    "webview",
-  );
+  // // Copy over the dist folder to the JetBrains extension //
+  // const intellijExtensionWebviewPath = path.join(
+  //   "..",
+  //   "extensions",
+  //   "intellij",
+  //   "src",
+  //   "main",
+  //   "resources",
+  //   "webview",
+  // );
 
-  const indexHtmlPath = path.join(intellijExtensionWebviewPath, "index.html");
-  fs.copyFileSync(indexHtmlPath, "tmp_index.html");
-  rimrafSync(intellijExtensionWebviewPath);
-  fs.mkdirSync(intellijExtensionWebviewPath, { recursive: true });
+  // const indexHtmlPath = path.join(intellijExtensionWebviewPath, "index.html");
+  // fs.copyFileSync(indexHtmlPath, "tmp_index.html");
+  // rimrafSync(intellijExtensionWebviewPath);
+  // fs.mkdirSync(intellijExtensionWebviewPath, { recursive: true });
 
-  await new Promise((resolve, reject) => {
-    ncp("dist", intellijExtensionWebviewPath, (error) => {
-      if (error) {
-        console.warn(
-          "[error] Error copying React app build to JetBrains extension: ",
-          error,
-        );
-        reject(error);
-      }
-      resolve();
-    });
-  });
+  // await new Promise((resolve, reject) => {
+  //   ncp("dist", intellijExtensionWebviewPath, (error) => {
+  //     if (error) {
+  //       console.warn(
+  //         "[error] Error copying React app build to JetBrains extension: ",
+  //         error,
+  //       );
+  //       reject(error);
+  //     }
+  //     resolve();
+  //   });
+  // });
 
   // Put back index.html
   if (fs.existsSync(indexHtmlPath)) {

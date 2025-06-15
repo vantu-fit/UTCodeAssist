@@ -5,23 +5,23 @@
   "version": "1.1.24",
   "repository": {
     "type": "git",
-    "url": "https://github.com/continuedev/continue"
+    "url": "https://github.com/vantu-fit/UTCodeAssist"
   },
   "extensionKind": [
     "ui",
     "workspace"
   ],
   "bugs": {
-    "url": "https://github.com/continuedev/continue/issues",
-    "email": "nate@continue.dev"
+    "url": "https://github.com/vantu-fit/UTCodeAssist/issues",
+    "email": "tiendatruong@gmail.com"
   },
   "homepage": "https://continue.dev",
-  "qna": "https://github.com/continuedev/continue/issues/new/choose",
+  "qna": "https://github.com/vantu-fit/UTCodeAssist/issues/new/choose",
   "license": "Apache-2.0",
-  "displayName": "Continue - Codestral, Claude, and more",
+  "displayName": "UTCoAssist2",
   "pricing": "Free",
-  "description": "The leading open-source AI code assistant",
-  "publisher": "Continue",
+  "description": "The AI code assistant",
+  "publisher": "UTCoAssist2",
   "engines": {
     "vscode": "^1.70.0",
     "node": ">=20.11.0"
