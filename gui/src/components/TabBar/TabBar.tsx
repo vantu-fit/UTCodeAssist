@@ -253,7 +253,7 @@ export function TabBar() {
           isActive={tab.isActive}
           onClick={() => handleTabClick(tab.id)}
         >
-          <TabTitle>UTCoAssist</TabTitle>
+          <TabTitle>{tab.title}</TabTitle>
           <CloseButton
             /* disabled={tabs.length === 1} */
             onClick={(e) => {

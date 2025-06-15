@@ -520,7 +520,7 @@ class TestBuilder:
                 capture_output=True,
                 text=True,
                 cwd=project_dir,
-                timeout=50,
+                timeout=20,
             )
             
             return {

@@ -45,28 +45,37 @@ import shutil
 @mcp.prompt(description="Instruction for creating unit test with given set of tools")
 def get_unit_test_instruction():
     return (
-    # "Follow the workflow unless instructed otherwise.\n",
-    "Pass the appropriate arguments into the function.\n",
-    "If a tool fails, reconsider the arguments you provided to it.\n",
-    "Do not proceed to the next tool if one tool has failed.\n",
-    "If the workflow fails, ask the user if they want to generate the unit test manually.\n",
-    "The complete workflow is as follows:\n",
-    "    - Create a source file containing the code for which unit tests need to be generated.\n",
-    "    - Configure the project.\n",
-    "    - Analyze the code.\n",
-    "    - Generate tests for the code using pytest. This tool uses the analysis_result from analyze_code() tool, remember to pass in the argument\n",
-    "    - Create test files to store the tests in the test_folder.\n",
-    "    - Use build_and_validate for the newly created test files.\n"
+    "1. The workflow should be implemented in a virtual environment \n"
+    "2. Pass the appropriate arguments to each function. You should decide the naming of the files.\n"
+    "3. If a tool fails, reconsider the arguments you provided.\n"
+    "4. Do not proceed to the next tool if the current one fails.\n"
+    "5. If the workflow fails, ask the user if they want to generate the unit test manually.\n"
+    "6. The complete workflow is as follows:\n"
+    "    - Create a source file containing the code for which unit tests need to be generated. Use folder = \"src_folder\".\n"
+    "    - Configure the project.\n"
+    "    - Analyze the code.\n"
+    "    - Generate tests using pytest. This tool requires analysis_result from the analyze_code() tool—remember to pass it as an argument.\n"
+    "    - Create test files to store the tests in the test_folder.\n"
+    "    - Use build_and_validate for the test files.\n"
+    "        - If test execution fails, attempt to enter the virtual environment and run the tests manually using a shell command.\n"
+    "7. This is the final step: after the workflow is complete, ask the user if they want to create the test in their workspace.\n"
+    "   Do not use create_file_in_virtual_env for this step.\n"
     )
 
-@mcp.tool(description="Check the current workspace")
-def check_current_work_space():
+
+@mcp.tool(description="Get the path to the virtual environment")  
+def get_virtual_env_path():
+    """
+    Get the path to the virtual environment.
+    """
     return os.getcwd()
 
-@mcp.tool(description="Create a file that include the input code if needed, folder argument should be either \"src_folder\" or \"test_folder\"")  
-def create_file(file_name: str, content: str, overwrite: bool = False, folder: str = "src_folder") -> dict:
+@mcp.tool(description="Create a file in a virtual environment that include the input code if needed, folder argument should be either \"src_folder\" or \"test_folder\"")  
+def create_file_in_virtual_env(file_name: str, content: str, overwrite: bool = False, folder: str = "src_folder") -> dict:
     """
-    Create a file with the given content, clearing the folder before creation.
+    Only use this tool if you need to create a file in a virtual environment for testing purposes.
+    Do not use this tool to create files in the user workspace.
+    Create a file with the given content in a virtual environment, clearing the folder before creation.
 
     Args:
         file_name (str): The name of the file.
@@ -143,12 +152,12 @@ def create_file(file_name: str, content: str, overwrite: bool = False, folder: s
 analysis = None
 
 @mcp.tool(description="Analyze source code and extract metadata for test generation")  
-async def analyze_code(file_path: str, language: str, ctx: Context = None) -> str:  
+async def analyze_code(file_name: str, language: str, ctx: Context = None) -> str:  
     """  
     Analyze source code file and extract metadata.  
       
     Args:  
-        file_path: Path to the source code file to analyze  
+        file_name: Name of the file to analyze 
         language: Programming language (python, java, javascript)  
     """  
     global analysis
@@ -157,11 +166,11 @@ async def analyze_code(file_path: str, language: str, ctx: Context = None) -> st
       
     try:  
         if ctx:  
-            await ctx.info(f"Analyzing {language} code at {file_path}")  
+            await ctx.info(f"Analyzing {language} code at {file_name}")  
           
         from src.parsers.code_analyzer import CodeAnalyzer  
         analyzer = CodeAnalyzer()  
-        result = analyzer.analyze(file_path, language)  
+        result = analyzer.analyze("src_folder/"+ file_name, language)  
         analysis = result
         if ctx:  
             await ctx.info("Code analysis completed successfully")  
