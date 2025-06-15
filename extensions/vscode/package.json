@@ -13,15 +13,15 @@
   ],
   "bugs": {
     "url": "https://github.com/vantu-fit/UTCodeAssist/issues",
-    "email": "tiendatruong@gmail.com"
+    "email": "nate@continue.dev"
   },
   "homepage": "https://continue.dev",
   "qna": "https://github.com/vantu-fit/UTCodeAssist/issues/new/choose",
   "license": "Apache-2.0",
-  "displayName": "UTCoAssist2",
+  "displayName": "UTCoAssist",
   "pricing": "Free",
   "description": "The AI code assistant",
-  "publisher": "UTCoAssist2",
+  "publisher": "Continue",
   "engines": {
     "vscode": "^1.70.0",
     "node": ">=20.11.0"
