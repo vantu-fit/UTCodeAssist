@@ -174,3 +174,4 @@ extensions/.continue-debug/
 
 .continuerules
 **/.continue/assistants/
+mcp-unittest/generated_tests
