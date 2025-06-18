@@ -109,7 +109,23 @@ const isMacTarget = target?.startsWith("darwin");
   // fs.copyFileSync(indexHtmlPath, "tmp_index.html");
   // rimrafSync(intellijExtensionWebviewPath);
   // fs.mkdirSync(intellijExtensionWebviewPath, { recursive: true });
+  // const indexHtmlPath = path.join(intellijExtensionWebviewPath, "index.html");
+  // fs.copyFileSync(indexHtmlPath, "tmp_index.html");
+  // rimrafSync(intellijExtensionWebviewPath);
+  // fs.mkdirSync(intellijExtensionWebviewPath, { recursive: true });
 
+  // await new Promise((resolve, reject) => {
+  //   ncp("dist", intellijExtensionWebviewPath, (error) => {
+  //     if (error) {
+  //       console.warn(
+  //         "[error] Error copying React app build to JetBrains extension: ",
+  //         error,
+  //       );
+  //       reject(error);
+  //     }
+  //     resolve();
+  //   });
+  // });
   // await new Promise((resolve, reject) => {
   //   ncp("dist", intellijExtensionWebviewPath, (error) => {
   //     if (error) {
@@ -129,7 +145,14 @@ const isMacTarget = target?.startsWith("darwin");
   // }
   // fs.copyFileSync("tmp_index.html", indexHtmlPath);
   // fs.unlinkSync("tmp_index.html");
+  // // Put back index.html
+  // if (fs.existsSync(indexHtmlPath)) {
+  //   rimrafSync(indexHtmlPath);
+  // }
+  // fs.copyFileSync("tmp_index.html", indexHtmlPath);
+  // fs.unlinkSync("tmp_index.html");
 
+  // console.log("[info] Copied gui build to JetBrains extension");
   // console.log("[info] Copied gui build to JetBrains extension");
 
   // Then copy over the dist folder to the VSCode extension //
