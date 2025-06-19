@@ -2,12 +2,13 @@
 """
 Demo script for MCP Unit Test Generator Server
 """
+import json
 import os
 import sys
-import json
-import requests
 import time
 from pathlib import Path
+
+import requests
 
 # Add src to path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'src'))
@@ -180,13 +181,6 @@ def main():
     if analysis_result:
         test_test_generation(analysis_result)
     
-    print("\n🎉 Demo completed!")
-    print("\n📚 Next steps:")
-    print("1. Configure AI API keys for better test generation:")
-    print("   export OPENAI_API_KEY='your-key'")
-    print("   export ANTHROPIC_API_KEY='your-key'")
-    print("2. Integrate with continuedev using MCP protocol")
-    print("3. Test with your own source code files")
 
 if __name__ == '__main__':
     main()

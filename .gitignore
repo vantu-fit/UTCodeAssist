@@ -175,6 +175,8 @@ extensions/.continue-debug/
 .continuerules
 **/.continue/assistants/
 mcp-unittest/generated_tests
+commit_history.sh
+mcp_unittest/src/mcp_server_qodo.py
 CODE_OF_CONDUCT.md
 SECURITY.md
 LICENSE
