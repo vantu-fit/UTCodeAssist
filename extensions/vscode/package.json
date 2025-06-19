@@ -1,7 +1,7 @@
 {
   "name": "continue",
   "icon": "media/icon.png",
-  "author": "Continue Dev, Inc",
+  "author": "22SE4AI-Group6",
   "version": "1.1.24",
   "repository": {
     "type": "git",
@@ -15,11 +15,12 @@
     "url": "https://github.com/vantu-fit/UTCodeAssist/issues",
     "email": "nate@continue.dev"
   },
-  "homepage": "https://UTCoAssist.dev",
+  "homepage": "https://continue.dev",
+  "qna": "https://github.com/vantu-fit/UTCodeAssist/issues/new/choose",
   "license": "Apache-2.0",
   "displayName": "UTCoAssist",
   "pricing": "Free",
-  "description": "The leading open-source AI code assistant",
+  "description": "The AI code assistant",
   "publisher": "Continue",
   "engines": {
     "vscode": "^1.70.0",
@@ -84,7 +85,7 @@
       }
     ],
     "configuration": {
-      "title": "UTCoAssist",
+      "title": "Continue",
       "properties": {
         "continue.telemetryEnabled": {
           "type": "boolean",
@@ -548,7 +549,7 @@
       "panel": [
         {
           "id": "continueConsole",
-          "title": "Continue Console",
+          "title": "UTCoAssist Console",
           "icon": "$(window)"
         }
       ]
@@ -558,7 +559,7 @@
         {
           "type": "webview",
           "id": "continue.continueGUIView",
-          "name": "Continue",
+          "name": "UTCoAssist",
           "icon": "media/sidebar-icon.png",
           "visibility": "visible"
         }
@@ -567,7 +568,7 @@
         {
           "type": "webview",
           "id": "continue.continueConsoleView",
-          "name": "Continue Console",
+          "name": "UTCoAssist Console",
           "icon": "$(window)",
           "visibility": "visible",
           "when": "config.continue.enableConsole"

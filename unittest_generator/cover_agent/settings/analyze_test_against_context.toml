@@ -1,0 +1,73 @@
+[analyze_test_against_context]
+system="""\
+You are a {{ language }} code assistant that accepts a test file and a list of context files.
+
+{% if framework == "flask" or "flask" in test_file_content.lower() %}
+FLASK-SPECIFIC INSTRUCTIONS:
+For Flask applications, consider these common patterns:
+- test_api.py typically tests app/api/views.py or API endpoints
+- test_basics.py typically tests app/__init__.py or basic app functionality  
+- test_client.py typically tests app/main/views.py or client-side operations
+- test_auth.py typically tests app/auth/views.py or authentication functionality
+- test_models.py typically tests app/models.py or database models
+
+If the test file imports from 'app' package (like 'from app import create_app'), look for corresponding modules in app/ directory structure.
+{% endif %}
+"""
+
+user="""\
+You will be given the content of a {{ language }} test file, and a list of context files.
+Your goal is to determine the following things:
+
+1. Is this test file a unit test?
+2. Among the context files, which file can be seen as the primary file being tested?
+
+Test file type: {{ test_file_type }}
+{% if framework %}Framework: {{ framework }}{% endif %}
+
+Inputs:
+
+This is the content of the test file, called `{{ test_file_name_rel }}`:
+========= 
+{{ test_file_content|trim }}
+=========
+
+These are the names of the context files:
+=========
+{{ context_files_names_rel| trim }}
+=========
+
+Analysis guidelines:
+- Look at import statements to understand dependencies
+- Check function/class names being tested
+- Consider file naming patterns (test_xxx.py usually tests xxx.py or xxx module)
+{% if framework == "flask" %}
+- For Flask apps: test files often test view functions, models, or app configuration
+- API tests usually test endpoint handlers
+- Client tests usually test user-facing functionality
+{% endif %}
+
+Your answer should be a YAML object equivalent to type $TestAgainstContextAnalysis, according to the following Pydantic definitions:
+=====
+class TestAgainstContextAnalysis(BaseModel):
+    is_this_a_unit_test: bool = Field(description="Is this test file a unit test? return 1 if it is a unit test, 0 otherwise")
+    main_file: str = Field(description="Among the provided context files, which one can be seen as the main file that the test file is testing? Choose the most relevant one. If no clear match, return 'None'")
+=====
+
+Example output:
+```yaml
+is_this_a_unit_test: 1
+main_file: |
+  app/api/views.py
+```
+
+Important notes:
+- Return relative path from project root for main_file
+- If no clear main file can be identified, return 'None'
+- Consider both direct imports and functional relationships
+
+The Response should be only a valid YAML object, without any introduction text or follow-up text.
+
+Answer:
+```yaml
+"""

@@ -1,57 +1,53 @@
 <div align="center">
 
-![Continue logo](media/readme.png)
+![UTCoAssist logo](media/readme.png)
 
 </div>
 
-<h1 align="center">Continue</h1>
+<h1 align="center">UTCoAssist</h1>
 
 <div align="center">
 
-**[Continue](https://docs.continue.dev) enables to developers create, share, and use custom AI code assistants with our open-source [VS Code](https://marketplace.visualstudio.com/items?itemName=Continue.continue) extension and [hub of models, rules, prompts, docs, and other building blocks](https://hub.continue.dev)**
+**UTCoAssist is a powerful AI code assistant designed to enhance your coding experience in VS Code, featuring advanced automation and integration capabilities.**
 
 </div>
 
-<div align="center">
+## 🚀 Key Features
 
-<a target="_blank" href="https://opensource.org/licenses/Apache-2.0" style="background:none">
-    <img src="https://img.shields.io/badge/License-Apache_2.0-blue.svg" style="height: 22px;" />
-</a>
-<a target="_blank" href="https://docs.continue.dev" style="background:none">
-    <img src="https://img.shields.io/badge/continue_docs-%23BE1B55" style="height: 22px;" />
-</a>
-<a target="_blank" href="https://discord.gg/vapESyrFmJ" style="background:none">
-    <img src="https://img.shields.io/badge/discord-join-continue.svg?labelColor=191937&color=6F6FF7&logo=discord" style="height: 22px;" />
-</a>
+### 🤖 AI-Powered Code Assistant
+- Intelligent code suggestions and completions
+- Context-aware code analysis and improvements
+- Natural language code explanations
+- Real-time coding support
 
-<p></p>
+### 📊 Automated Reporting System
+- **Jira Integration**: Automatic issue tracking and reporting
+- **Smart Bug Reports**: AI-enhanced bug description generation
+- **Automated Updates**: Real-time synchronization with Jira boards
+- **Custom Templates**: Configurable report formats
 
-## Chat
+### 🔄 GitHub MCP Integration
+- **Automated Workflows**: Streamlined code review process
+- **Smart PR Management**: Intelligent pull request handling
+- **Code Analysis**: Automated code quality checks
+- **Integration Hooks**: Custom GitHub workflow automation
 
-[Chat](https://continue.dev/docs/chat/how-to-use-it) makes it easy to ask for help from an LLM without needing to leave the IDE
+### ⚡ Development Tools
+- **Smart Code Completion**: Context-aware suggestions
+- **Code Analysis**: Real-time improvement recommendations
+- **Custom Workflows**: Adaptable to your development process
+- **Team Collaboration**: Enhanced code sharing and review
 
-![chat](docs/static/img/chat.gif)
+## 🎯 Getting Started
 
-## Autocomplete
+1. Install UTCoAssist from VS Code marketplace
+2. Configure your Jira and GitHub credentials
+3. Start coding with automated support
 
-[Autocomplete](https://continue.dev/docs/autocomplete/how-to-use-it) provides inline code suggestions as you type
+## 💡 Usage Examples
 
-![autocomplete](docs/static/img/autocomplete.gif)
-
-## Edit
-
-[Edit](https://continue.dev/docs/edit/how-to-use-it) is a convenient way to modify code without leaving your current file
-
-![edit](docs/static/img/edit.gif)
-
-## Agent
-
-[Agent](https://continue.dev/docs/agent/how-to-use-it) enables you to make more substantial changes to your codebase
-
-![agent](docs/static/img/agent.gif)
-
-</div>
-
-## License
-
-[Apache 2.0 © 2023-2024 Continue Dev, Inc.](./LICENSE)
+- Automatic bug report generation
+- Smart PR descriptions
+- Integrated code reviews
+- Automated issue tracking
+- Custom workflow automation
