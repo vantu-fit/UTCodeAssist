@@ -1,0 +1,86 @@
+# Cần tạo file .env trong thư mục gốc với các biến môi trường cần thiết:
+# OPENAI_API_KEY=sk-xxxxxxx       (Nhập key API OpenAI của bạn nếu dùng model từ OpenAI)
+# JIRA_EMAIL=you@example.com      (Email bạn dùng để đăng nhập Jira)
+# JIRA_API_TOKEN=your_jira_token  (Token cá nhân từ Jira (không phải mật khẩu))
+# JIRA_URL=https://your-domain.atlassian.net (Tên miền Jira của bạn)
+# ... (Các biến môi trường khác nếu cần thiết)
+
+name: Local Assistant
+version: 1.0.0
+schema: v1
+models:
+  - name: GPT-4o Mini # Tên gợi nhớ mô hình do bạn đặt, có thể là bất kỳ tên nào bạn muốn.
+    provider: openai # Tên nhà cung cấp: "openai" (hoặc "local", "ollama", "azure", v.v.)
+    model: gpt-4o-mini # ID mô hình thật do OpenAI cung cấp (ví dụ: "gpt-4", "gpt-4o", "gpt-3.5-turbo")
+    apiKey: your_api_key
+    
+  - name: GPT-4o # Model khác cũng từ OpenAI (có thể bỏ nếu không dùng)
+    provider: openai
+    model: gpt-4o-mini
+    apiKey: your_api_key
+
+  - name: Codestral
+    provider: mistral
+    model: codestral-latest
+    apiKey: your_api_key
+    roles:
+      - autocomplete
+      - chat
+      - edit
+      - apply
+    defaultCompletionOptions:
+      contextLength: 256000
+
+context:
+  - provider: code 
+  - provider: docs
+  - provider: diff
+  - provider: terminal
+  - provider: problems
+  - provider: folder
+  - provider: codebase
+  - provider: jira # Nếu muốn tích hợp Jira
+    params:
+      domain: your-domain.atlassian.net # Thay bằng tên miền Jira của bạn
+     
+
+mcpServers:
+  - name: UTServer # Tên của server (đặt tùy ý)
+    command: /absolute/path/to/uv # Ví dụ: C:\\Users\\MTBH\\.local\\bin\\uv.EXE
+    args: # Các tham số để chạy server
+      - --directory
+      - /absolute/path/to/server-dir # Thay bằng đường dẫn chứa source của MCP server. Ví dụ: "D:\\code\\HCMus\\SE4AI\\supertest\\mcp-unittest-server"
+      - run
+      - /absolute/path/to/server-entry.py  # Thay bằng file Python chính (thường là `src/main.py` hoặc `mcp_main.py`). Ví dụ: "D:/code/HCMus/SE4AI/supertest/mcp-unittest-server/src/mcp_main.py"
+  
+    connectionTimeout: 30000
+  
+  - name: GitHub MCP Server
+    command: docker
+    args:
+      - run
+      - -i
+      - --rm
+      - -e
+      - GITHUB_PERSONAL_ACCESS_TOKEN
+      - ghcr.io/github/github-mcp-server
+    env: # Người dùng cần điền trong file `.env`
+      GITHUB_PERSONAL_ACCESS_TOKEN
+
+  - name: mcp_Jira
+    command: docker
+    args:
+    - run
+    - -i
+    - --rm
+    - -e 
+    - JIRA_URL
+    - -e
+    - JIRA_USERNAME
+    - -e
+    - JIRA_API_TOKEN
+    - ghcr.io/sooperset/mcp-atlassian:latest
+    env: # Người dùng cần điền trong file `.env`
+      JIRA_API_TOKEN 
+      JIRA_USERNAME
+      JIRA_URL
