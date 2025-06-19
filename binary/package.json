@@ -1,10 +1,4 @@
 {
-  "name": "binary",
-  "version": "1.0.0",
-  "author": "Continue Dev, Inc",
-  "description": "",
-  "main": "out/index.js",
-  "bin": "out/index.js",
   "pkg": {
     "scripts": [
       "node_modules/axios/**/*"
